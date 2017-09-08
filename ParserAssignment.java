@@ -56,6 +56,7 @@ class Parser {
             throw new ParseException(type, curToken.literal);
         }
         printCurToken();
+        advanceToken();
     }
 
     private boolean curTokenIs(TokenType type) {
@@ -70,10 +71,8 @@ class Parser {
     private void parseProgram() throws ParseException {
         printEnter("program");
         expectToken(TokenType.Begin);
-        advanceToken();
         parseBody();
         expectToken(TokenType.End);
-        advanceToken();
         expectToken(TokenType.EOF);
         printExit("program");
     }
@@ -89,7 +88,6 @@ class Parser {
     private void parseStmt() throws ParseException {
         printEnter("stmt");
         expectToken(TokenType.Compute);
-        advanceToken();
         parseExpr();
         printExit("stmt");
     }
@@ -151,27 +149,22 @@ class Parser {
                 }, curToken.literal);
         }
         printCurToken(); // I'm manually checking the token, so checkCurToken doesn't print it
-        advanceToken();
         parseExpr();
         expectToken(TokenType.RParens);
-        advanceToken();
         printExit("factor");
     }
 
     private void parseIdent() throws ParseException {
         printEnter("id");
         expectToken(TokenType.Ident);
-        advanceToken();
         printExit("id");
     }
 
     private void parseFunction() throws ParseException {
         printEnter("function");
         expectToken(TokenType.LParens);
-        advanceToken();
         parseExpr();
         expectToken(TokenType.RParens);
-        advanceToken();
         printExit("function");
     }
 }
