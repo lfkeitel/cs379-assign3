@@ -1,0 +1,74 @@
+Write a Java program that implements a lexical analyzer, lex, and a recursive-descent parser, parse,
+and an error handling program, error, for the following EBNF description of a simple arithmetic expression language:
+
+<program> -> BEGIN <body> END
+<body> -> {<stmt>}+
+<stmt> -> COMPUTE <expr>
+<expr> -> <term> { (+ | -) <term>}
+<term> -> <factor> { (* | /) <factor>}
+<factor> -> <id> | integer-value | ( <expr> ) | <function>
+<id> -> A1 | A2 | A3
+<function> -> SQUARE ( <expr> ) | SQRT ( <expr> ) | ABS ( <expr>)
+
+Be sure to provide an output that proves your program works properly. For example, the string:
+
+"BEGIN COMPUTE A1 + A2 * ABS ( A3 ) COMPUTE A1 + A1 END EOF"
+
+Will generate a trace of:
+Enter <lex> - lexeme = BEGIN token = B
+Enter <parse>
+Enter <program>
+Enter <lex> - lexeme = COMPUTE token = C
+Enter <body>
+Enter <stmt>
+Enter <lex> - lexeme = A1 token = I
+Enter <expr>
+Enter <term>
+Enter <factor>
+Enter <lex> - lexeme = + token = +
+Exit <factor>
+Exit <term>
+Enter <lex> - lexeme = A2 token = I
+Enter <term>
+Enter <factor>
+Enter <lex> - lexeme = * token = *
+Exit <factor>
+Enter <lex> - lexeme = ABS token = A
+Enter <factor>
+Enter <function>
+Enter <lex> - lexeme = ( token = (
+Enter <lex> - lexeme = A3 token = I
+Enter <expr>
+Enter <term>
+Enter <factor>
+Enter <lex> - lexeme = ) token = )
+Exit <factor>
+Exit <term>
+Exit <expr>
+Enter <lex> - lexeme = COMPUTE token = C
+Exit <function>
+Exit <factor>
+Exit <term>
+Exit <expr>
+Exit <stmt>
+Enter <stmt>
+Enter <lex> - lexeme = A1 token = I
+Enter <expr>
+Enter <term>
+Enter <factor>
+Enter <lex> - lexeme = + token = +
+Exit <factor>
+Exit <term>
+Enter <lex> - lexeme = A1 token = I
+Enter <term>
+Enter <factor>
+Enter <lex> - lexeme = END token = E
+Exit <factor>
+Exit <term>
+Exit <expr>
+Exit <stmt>
+Exit <body>
+Enter <lex> - lexeme = EOF token = Z
+Exit <program>
+Exit <parse>
+"BEGIN COMPUTE A1 + A2 * ABS ( A3 * A2 + A1 ) COMPUTE A1 + A1 END EOF"
