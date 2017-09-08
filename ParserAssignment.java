@@ -73,6 +73,8 @@ class Parser {
         advanceToken();
         parseBody();
         expectToken(TokenType.End);
+        advanceToken();
+        expectToken(TokenType.EOF);
         printExit("program");
     }
 
