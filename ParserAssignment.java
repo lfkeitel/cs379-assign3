@@ -6,8 +6,8 @@ public class ParserAssignment {
         // Allow code to be given as an argument
         if (args.length > 0) {
             code = args[0];
-            System.out.println(code);
         }
+        System.out.println(code);
 
         Lexer lexer = new Lexer(code);
         Parser parser = new Parser(lexer);
