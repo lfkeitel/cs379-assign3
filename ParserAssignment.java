@@ -2,7 +2,7 @@ public class ParserAssignment {
     public static void main(String[] args) {
         // Use the assignment example as the default code
         String code = "BEGIN COMPUTE A1 + A2 * ABS ( A3 ) COMPUTE A1 + A1 END EOF";
-        
+
         // Allow code to be given as an argument
         if (args.length > 0) {
             code = args[0];
@@ -26,15 +26,15 @@ class Parser {
 
     // Utility print functions
     private void printEnter(String section) {
-        System.out.println("Entering <"+section+">");
+        System.out.println("Entering <" + section + ">");
     }
 
     private void printExit(String section) {
-        System.out.println("Exiting <"+section+">");
+        System.out.println("Exiting <" + section + ">");
     }
 
     private void printCurToken() {
-        System.out.println("Current Token: "+curToken);
+        System.out.println("Current Token: " + curToken);
     }
 
     public void parse() {
@@ -62,7 +62,7 @@ class Parser {
     private boolean curTokenIs(TokenType type) {
         return curToken.type == type;
     }
-    
+
     private boolean isFunction() {
         return curTokenIs(TokenType.Abs) || curTokenIs(TokenType.Square) || curTokenIs(TokenType.Sqrt);
     }
@@ -79,7 +79,7 @@ class Parser {
 
     private void parseBody() throws ParseException {
         printEnter("body");
-        while(curTokenIs(TokenType.Compute)) {
+        while (curTokenIs(TokenType.Compute)) {
             parseStmt();
         }
         printExit("body");
@@ -138,15 +138,8 @@ class Parser {
         }
 
         if (!curTokenIs(TokenType.LParens)) {
-            throw new ParseException(
-                new TokenType[]{
-                    TokenType.Ident,
-                    TokenType.Int,
-                    TokenType.LParens,
-                    TokenType.Abs,
-                    TokenType.Sqrt,
-                    TokenType.Square
-                }, curToken.literal);
+            throw new ParseException(new TokenType[] { TokenType.Ident, TokenType.Int, TokenType.LParens, TokenType.Abs,
+                    TokenType.Sqrt, TokenType.Square }, curToken.literal);
         }
         printCurToken(); // I'm manually checking the token, so checkCurToken doesn't print it
         parseExpr();
@@ -172,19 +165,18 @@ class Parser {
 // ParseException is used to tell the user that an unexpected token was encountered
 class ParseException extends Exception {
     public ParseException(TokenType expected, String got) {
-        super("Unexpected token. Expected "+expected+". Got "+got+".");
+        super("Unexpected token. Expected " + expected + ". Got " + got + ".");
     }
 
-
     public ParseException(TokenType[] expected, String got) {
-        super("Unexpected token. Expected "+expectedListToString(expected)+". Got "+got+".");
+        super("Unexpected token. Expected " + expectedListToString(expected) + ". Got " + got + ".");
     }
 
     private static String expectedListToString(TokenType[] expected) {
         StringBuilder tokens = new StringBuilder();
         for (int i = 0; i < expected.length; i++) {
             tokens.append(expected[i].toString());
-            if (i < expected.length-1) {
+            if (i < expected.length - 1) {
                 tokens.append(", ");
             }
         }
@@ -207,49 +199,39 @@ class Token {
 }
 
 enum TokenType {
-    EOF,
-    Illegal,
+    EOF, Illegal,
 
     // Operators
-    Plus,
-    Minus,
-    Asterisk,
-    Slash,
+    Plus, Minus, Asterisk, Slash,
 
     // Data types/identifiers
-    Int,
-    Ident,
+    Int, Ident,
 
     // Grouping symbols
-    LParens,
-    RParens,
+    LParens, RParens,
 
     // Keywords
-    Begin,
-    End,
-    Compute,
+    Begin, End, Compute,
 
     // Function keywords as defined in the grammar
-    Square,
-    Sqrt,
-    Abs;
+    Square, Sqrt, Abs;
 
     public String toString() {
-        switch(this) {
-            case Plus:
-                return "+";
-            case Minus:
-                return "-";
-            case Asterisk:
-                return "*";
-            case Slash:
-                return "/";
-            case LParens:
-                return "(";
-            case RParens:
-                return ")";
-            default: // Everything is named as its literal value
-                return this.name();
+        switch (this) {
+        case Plus:
+            return "+";
+        case Minus:
+            return "-";
+        case Asterisk:
+            return "*";
+        case Slash:
+            return "/";
+        case LParens:
+            return "(";
+        case RParens:
+            return ")";
+        default: // Everything is named as its literal value
+            return this.name();
         }
     }
 
@@ -257,25 +239,25 @@ enum TokenType {
         ident = ident.toUpperCase();
 
         // Check for keywords
-        switch(ident) {
-            case "BEGIN":
-                return Begin;
-            case "END":
-                return End;
-            case "EOF":
-                return EOF;
-            case "COMPUTE":
-                return Compute;
-            case "SQUARE":
-                return Square;
-            case "SQRT":
-                return Sqrt;
-            case "ABS":
-                return Abs;
-            case "A1":
-            case "A2":
-            case "A3":
-                return Ident;
+        switch (ident) {
+        case "BEGIN":
+            return Begin;
+        case "END":
+            return End;
+        case "EOF":
+            return EOF;
+        case "COMPUTE":
+            return Compute;
+        case "SQUARE":
+            return Square;
+        case "SQRT":
+            return Sqrt;
+        case "ABS":
+            return Abs;
+        case "A1":
+        case "A2":
+        case "A3":
+            return Ident;
         }
 
         // Otherwise, IDK what it is
@@ -300,14 +282,14 @@ class Lexer {
         }
         return input.charAt(inputLoc);
     }
-    
+
     // Returns the character as the next lex location.
     // Will return null (0x00) if next char would be end of input.
     private char nextChar() {
-        if (inputLoc+1 == input.length()) {
+        if (inputLoc + 1 == input.length()) {
             return 0;
         }
-        return input.charAt(inputLoc+1);
+        return input.charAt(inputLoc + 1);
     }
 
     private void advanceChar() {
@@ -318,44 +300,44 @@ class Lexer {
         skipWhitespace(); // Whitespace is insignificant and not needed for parsing
         Token token;
 
-        switch(curChar()) {
-            // End of file
-            case 0:
-                token = new Token("EOF", TokenType.EOF);
-                break;
+        switch (curChar()) {
+        // End of file
+        case 0:
+            token = new Token("EOF", TokenType.EOF);
+            break;
 
-            // Operators
-            case '+':
-                token = new Token("+", TokenType.Plus);
-                break;
-            case '-':
-                token = new Token("-", TokenType.Minus);
-                break;
-            case '*':
-                token = new Token("*", TokenType.Asterisk);
-                break;
-            case '/':
-                token = new Token("/", TokenType.Slash);
-                break;
+        // Operators
+        case '+':
+            token = new Token("+", TokenType.Plus);
+            break;
+        case '-':
+            token = new Token("-", TokenType.Minus);
+            break;
+        case '*':
+            token = new Token("*", TokenType.Asterisk);
+            break;
+        case '/':
+            token = new Token("/", TokenType.Slash);
+            break;
 
-            // Groupings
-            case '(':
-                token = new Token("(", TokenType.LParens);
-                break;
-            case ')':
-                token = new Token(")", TokenType.RParens);
-                break;
+        // Groupings
+        case '(':
+            token = new Token("(", TokenType.LParens);
+            break;
+        case ')':
+            token = new Token(")", TokenType.RParens);
+            break;
 
-            // Complex types/idents
-            default:
-                if (isDigit()) {
-                    token = new Token(lexNumber(), TokenType.Int);
-                } else if (isLetter()) {
-                    String ident = lexIdent();
-                    token = new Token(ident, TokenType.identOrKeyword(ident));
-                } else {
-                    token = new Token(Character.toString(curChar()), TokenType.Illegal);
-                }
+        // Complex types/idents
+        default:
+            if (isDigit()) {
+                token = new Token(lexNumber(), TokenType.Int);
+            } else if (isLetter()) {
+                String ident = lexIdent();
+                token = new Token(ident, TokenType.identOrKeyword(ident));
+            } else {
+                token = new Token(Character.toString(curChar()), TokenType.Illegal);
+            }
         }
 
         advanceChar();
@@ -365,25 +347,25 @@ class Lexer {
     private String lexNumber() {
         int start = inputLoc;
 
-        while(isDigit(nextChar())) {
+        while (isDigit(nextChar())) {
             advanceChar();
         }
 
-        return input.substring(start, inputLoc+1);
+        return input.substring(start, inputLoc + 1);
     }
 
     private String lexIdent() {
         int start = inputLoc;
 
-        while(isLetter(nextChar()) || isDigit(nextChar())) {
+        while (isLetter(nextChar()) || isDigit(nextChar())) {
             advanceChar();
         }
 
-        return input.substring(start, inputLoc+1);
+        return input.substring(start, inputLoc + 1);
     }
 
     private void skipWhitespace() {
-        while(isWhitespace()) {
+        while (isWhitespace()) {
             advanceChar();
         }
     }
