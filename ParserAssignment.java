@@ -142,6 +142,7 @@ class Parser {
                     TokenType.Sqrt, TokenType.Square }, curToken.literal);
         }
         printCurToken(); // I'm manually checking the token, so checkCurToken doesn't print it
+        advanceToken();
         parseExpr();
         expectToken(TokenType.RParens);
         printExit("factor");
